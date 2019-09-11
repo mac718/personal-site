@@ -1,27 +1,32 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <link rel="stylesheet" href='css/style.css'>
+
+
   <title>Mike Coon - JavaScript Dates</title>
 </head>
-<body>
-<h1>JavaScript Dates</h1>
+<body class="container">
+<h1 class='post'>JavaScript Dates</h1>
 
-<p>While the specific duties of coders who fall under the broad category ‘web developer’ in 2019 vary considerably, odds are just about every one of them has had to deal with a bug related to time zones and Date objects in JavaScript at some point. My latest React app depends heavily on Date objects that need to be both derived from and converted to date Strings and consequently tested the limits of my sanity. The struggle was real, but after a great deal of frustration and confusion, the solution to the problem turned out to be relatively simple.</p>
+<p>While the specific duties of coders who fall under the broad category ‘web developer’ in 2019 cover a broad range, odds are just about every one of them has had to deal with a bug related to time zones and Date objects in JavaScript at some point. My latest React app depends heavily on Date objects that need to be both derived from and converted to date strings and, therefore, tested the limits of my sanity. The struggle was real, but after a great deal of frustration and confusion, the solution to the problem turned out to be relatively simple.</p>
 
 <p>The React app in question is a historical stock trading simulator that allows a hypothetical user to trade a selection of stocks and maintain a portfolio using stock data from 2017 provided by the Quandl API.  The stock information and the user’s portfolio all change in real time based on a date range slider at the top of the page that sets the current 2017 date. As such, the current date object is utilized in just about every component to calculate and display the proper stock and portfolio values. So imagine my dismay when I realized after many hours of work, the data being displayed was not corresponding to that of the current date. Further, I discovered that the entire date range was actually shifting back by a day after the first slide of the range slider. I’d be lying if I asserted that I now understand all of what was happening under the hood, but, on a hunch, I formulated the hypothesis that my date object unpredictability was in some way related to time zones. The following function is the fix I employed:</p>
 
-<code>
-const makeUTCDate = milliseconds => {
-  let date = new Date(milliseconds)
-  let dateYear = date.getUTCFullYear();
-  let dateMonth = date.getUTCMonth();
-  let dateDay = date.getUTCDate();
-  let UTCdate = new Date(dateYear, dateMonth, dateDay)
+<div class='code'>
+  <pre><code>
+  const makeUTCDate = milliseconds => {
+    let date = new Date(milliseconds)
+    let dateYear = date.getUTCFullYear();
+    let dateMonth = date.getUTCMonth();
+    let dateDay = date.getUTCDate();
+    let UTCdate = new Date(dateYear, dateMonth, dateDay)
 
-  return UTCdate
-}
-</code>
-
+    return UTCdate
+  }
+  </code></pre>
+</div>
 
 <p>The millisecond value being passed into the function is coming from the value of the date slider. The function hinges on the fact that in the context of dates, millisecond values are relative to Jan 1, 1970 UTC time. By creating a new date object out of the UTC years, months, and days corresponding to the given millisecond value, we are avoiding the confusion caused by the web browser’s automatic time zone correction based on the IP address of the user. I implement makeUTCDate, in two places: 1. The initial state, 2. The reducer case that handles updating the date slider date in state. Thanks to Redux’s centralized state, this ensures that every component utilizing that state value is receiving a consistent date object.</p> 
 
