@@ -79,7 +79,7 @@
         <div class="col-lg-8 text-center">
           <h2 class="text-white mt-0">About Me</h2>
           <hr class="divider light my-4">
-          <p class="text-white-50 mb-4">I'm a former classicist turned artisanal soap maker who developed a passion for code while searching for an intellectual outlet to counteract the often monotonous workflow of operating a small soap business. Once I got started, I couldn't stop! I'm also an enthusiatic powerlifter and a long time lover of music. I've played guitar since I was a teenager and love seeking out esoteric and inspirational musicians to populate my music library. I currently reside in Portland, OR</p>
+          <p class="text-white-50 mb-4" id='about-body'>I'm a former classicist turned artisanal soap maker who developed a passion for code while searching for an intellectual outlet to counteract the often monotonous workflow of operating a small soap business. Once I got started, I couldn't stop! I'm also an enthusiatic powerlifter and a long time lover of music. I've played guitar since I was a teenager and love seeking out esoteric and inspirational musicians to populate my music library. I currently reside in Portland, OR</p>
           <a class="btn btn-light btn-xl js-scroll-trigger" href="#services">Get Started!</a>
         </div>
       </div>
@@ -140,12 +140,14 @@
   <section id="portfolio">
     <div class="container-fluid p-0">
       <div class="row ">
-        <div class="col-lg-4 col-sm-6">
+        <div class="col-lg-6 col-sm-8">
           <a class="portfolio-box" href="https://github.com/mac718/project_fideligard_spa">
             <img class="img-fluid" src="img/fideligard_screenshot.png" alt="">
             <div class="portfolio-box-caption">
               <div class="project-category text-white-50">
-                React
+                A stock trading simulator using data from 2017 for a select group of stocks. Data is fetched
+                via the Quandl API (www.quandl.com) by means of a simple Rails back end. The front end was built with
+                React + Redux.
               </div>
               <div class="project-name">
                 Fideligard Stock Trading Simulator
@@ -153,12 +155,12 @@
             </div>
           </a>
         </div>
-        <div class="col-lg-4 col-sm-6">
-          <a class="portfolio-box" href="https://github.com/mac718/odin-facebook">
-            <img class="img-fluid" src="img/odin-facebook-screenshot.png" alt="">
+        <div class="col-lg-6 col-sm-8">
+          <a class="portfolio-box" href="https://obscure-meadow-29457.herokuapp.com">
+            <img class="img-fluid" src="img/odin-facebook_screenshot.png" alt="">
             <div class="portfolio-box-caption">
               <div class="project-category text-white-50">
-                Rails
+                A Facebook clone built with Rails.
               </div>
               <div class="project-name">
                 Odinbook
@@ -166,7 +168,7 @@
             </div>
           </a>
         </div>
-        <div class="col-lg-4 col-sm-6">
+        <!--<div class="col-lg-4 col-sm-6">
           <a class="portfolio-box" href="img/portfolio/fullsize/3.jpg">
             <img class="img-fluid" src="img/portfolio/thumbnails/3.jpg" alt="">
             <div class="portfolio-box-caption">
@@ -179,7 +181,7 @@
             </div>
           </a>
         </div>
-        <!--<div class="col-lg-4 col-sm-6">
+        <div class="col-lg-4 col-sm-6">
           <a class="portfolio-box" href="img/portfolio/fullsize/4.jpg">
             <img class="img-fluid" src="img/portfolio/thumbnails/4.jpg" alt="">
             <div class="portfolio-box-caption">
