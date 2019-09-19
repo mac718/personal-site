@@ -1,0 +1,26 @@
+.post h1 {
+  text-align: center;
+  margin-bottom: 25px;
+}
+
+.code {
+  border: 1px solid;
+  background-color: lightgray;
+}
+
+#navbarResponsive {
+  font-size: 1.25rem;
+}
+
+#musings {
+  margin-top: 25px;
+}
+
+#about-body {
+  font-size: 1.25rem;
+  color: white !important;
+}
+
+#musings a {
+  font-size: 1.25rem;
+}

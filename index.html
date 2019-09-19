@@ -23,6 +23,8 @@
   <!-- Theme CSS - Includes Bootstrap -->
   <link href="css/creative.min.css" rel="stylesheet">
 
+  <link href="css/style.css" rel="stylesheet">
+
 </head>
 
 <body id="page-top">
@@ -30,7 +32,7 @@
   <!-- Navigation -->
   <nav class="navbar navbar-expand-lg navbar-light fixed-top py-3" id="mainNav">
     <div class="container">
-      <a class="navbar-brand js-scroll-trigger" href="#page-top">Start Bootstrap</a>
+      <a class="navbar-brand js-scroll-trigger" href="#page-top">Top</a>
       <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -40,10 +42,10 @@
             <a class="nav-link js-scroll-trigger" href="#about">About</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link js-scroll-trigger" href="#services">Services</a>
+            <a class="nav-link js-scroll-trigger" href="#services">Languages and Technologies</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link js-scroll-trigger" href="#portfolio">Portfolio</a>
+            <a class="nav-link js-scroll-trigger" href="#portfolio">Select Projects</a>
           </li>
           <li class="nav-item">
             <a class="nav-link js-scroll-trigger" href="#contact">Contact</a>
@@ -59,10 +61,11 @@
       <div class="row h-100 align-items-center justify-content-center text-center">
         <div class="col-lg-10 align-self-end">
           <h1 class="text-uppercase text-white font-weight-bold">Mike Coon</h1>
+          <h2 class="text-white">Full Stack Developer</h2>
           <hr class="divider my-4">
         </div>
         <div class="col-lg-8 align-self-baseline">
-          <p class="text-white-75 font-weight-light mb-5">Start Bootstrap can help you build better websites using the Bootstrap framework! Just download a theme and start customizing, no strings attached!</p>
+          <p class="text-white-75 font-weight-light mb-5">Coder, powerlifter, jazz enthusiast, general nerd.</p>
           <a class="btn btn-primary btn-xl js-scroll-trigger" href="#about">Find Out More</a>
         </div>
       </div>
@@ -74,9 +77,9 @@
     <div class="container">
       <div class="row justify-content-center">
         <div class="col-lg-8 text-center">
-          <h2 class="text-white mt-0">We've got what you need!</h2>
+          <h2 class="text-white mt-0">About Me</h2>
           <hr class="divider light my-4">
-          <p class="text-white-50 mb-4">Start Bootstrap has everything you need to get your new website up and running in no time! Choose one of our open source, free to download, and easy to use themes! No strings attached!</p>
+          <p class="text-white-50 mb-4" id='about-body'>I'm a former classicist turned artisanal soap maker who developed a passion for code while searching for an intellectual outlet to counteract the often monotonous workflow of operating a small soap business. Once I got started, I couldn't stop! I'm also an enthusiatic powerlifter and a long time lover of music. I've played guitar since I was a teenager and love seeking out esoteric and inspirational musicians to populate my music library. I currently reside in Portland, OR</p>
           <a class="btn btn-light btn-xl js-scroll-trigger" href="#services">Get Started!</a>
         </div>
       </div>
@@ -86,7 +89,7 @@
   <!-- Services Section -->
   <section class="page-section" id="services">
     <div class="container">
-      <h2 class="text-center mt-0">At Your Service</h2>
+      <h2 class="text-center mt-0">Languages and Technologies</h2>
       <hr class="divider my-4">
       <div class="row">
         <div class="col-lg-4 col-md-6 text-center">
@@ -97,7 +100,8 @@
             <img width="100" alt="Postgresql elephant" src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/Postgresql_elephant.svg/512px-Postgresql_elephant.svg.png">
           
             <h3 class="h4 mb-2">Back End</h3>
-            <p class="text-muted mb-0">Our themes are updated regularly to keep them bug free!</p>
+            <p class="text-muted mb-0">Ruby, Ruby on Rails, Sinatra, and PostgreSQL. I also have some familiartiy
+            with NodeJS and Express. I'm generally comfortable with the MVC(r) model.</p>
           </div>
         </div>
         <div class="col-lg-4 col-md-6 text-center">
@@ -110,7 +114,8 @@
             <img width="65" alt="Boostrap logo" src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/ea/Boostrap_logo.svg/512px-Boostrap_logo.svg.png">
             
             <h3 class="h4 mb-2">Front End</h3>
-            <p class="text-muted mb-0">All dependencies are kept current to keep things fresh.</p>
+            <p class="text-muted mb-0">JavaScript, including the latest and greatest features from es6, React, 
+            HTML5, CSS3, Bootstrap, and more. </p>
           </div>
         </div>
         <div class="col-lg-4 col-md-6 text-center">
@@ -122,7 +127,8 @@
            <img width="100" alt="Mac OS wordmark logo" src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/89/Mac_OS_wordmark_logo.svg/512px-Mac_OS_wordmark_logo.svg.png">
             
             <h3 class="h4 mb-2">Tools</h3>
-            <p class="text-muted mb-0">You can use this design as is, or you can make changes!</p>
+            <p class="text-muted mb-0">I'm comfortable using the tools of the trade. I have experiecing developing on 
+            both Mac OS and Linux.</p>
           </div>
         </div>
       </div>
@@ -130,36 +136,39 @@
   </section>
 
   <!-- Portfolio Section -->
+  <h2 class="text-center mt-0">Select Projects</h2>
   <section id="portfolio">
     <div class="container-fluid p-0">
-      <div class="row no-gutters">
-        <div class="col-lg-4 col-sm-6">
-          <a class="portfolio-box" href="img/portfolio/fullsize/1.jpg">
-            <img class="img-fluid" src="img/portfolio/thumbnails/1.jpg" alt="">
+      <div class="row ">
+        <div class="col-lg-6 col-sm-8">
+          <a class="portfolio-box" href="https://github.com/mac718/project_fideligard_spa">
+            <img class="img-fluid" src="img/fideligard_screenshot.png" alt="">
             <div class="portfolio-box-caption">
               <div class="project-category text-white-50">
-                Category
+                A stock trading simulator using data from 2017 for a select group of stocks. Data is fetched
+                via the Quandl API (www.quandl.com) by means of a simple Rails back end. The front end was built with
+                React + Redux.
               </div>
               <div class="project-name">
-                Project Name
+                Fideligard Stock Trading Simulator
               </div>
             </div>
           </a>
         </div>
-        <div class="col-lg-4 col-sm-6">
-          <a class="portfolio-box" href="img/portfolio/fullsize/2.jpg">
-            <img class="img-fluid" src="img/portfolio/thumbnails/2.jpg" alt="">
+        <div class="col-lg-6 col-sm-8">
+          <a class="portfolio-box" href="https://obscure-meadow-29457.herokuapp.com">
+            <img class="img-fluid" src="img/odin-facebook_screenshot.png" alt="">
             <div class="portfolio-box-caption">
               <div class="project-category text-white-50">
-                Category
+                A Facebook clone built with Rails.
               </div>
               <div class="project-name">
-                Project Name
+                Odinbook
               </div>
             </div>
           </a>
         </div>
-        <div class="col-lg-4 col-sm-6">
+        <!--<div class="col-lg-4 col-sm-6">
           <a class="portfolio-box" href="img/portfolio/fullsize/3.jpg">
             <img class="img-fluid" src="img/portfolio/thumbnails/3.jpg" alt="">
             <div class="portfolio-box-caption">
@@ -210,16 +219,17 @@
               </div>
             </div>
           </a>
-        </div>
+        </div>-->
       </div>
     </div>
   </section>
 
-  <!-- Call to Action Section -->
-  <section class="page-section bg-dark text-white">
+  <!-- Musings -->
+  <section class="page-section bg-dark text-white" id='musings'>
     <div class="container text-center">
-      <h2 class="mb-4">Free Download at Start Bootstrap!</h2>
-      <a class="btn btn-light btn-xl" href="https://startbootstrap.com/themes/creative/">Download Now!</a>
+      <h2 class="mb-4">Technical Musings</h2>
+      <a href='javascript-dates.html'>Some thoughts on handling dates in JS</a>
+      <!--<a class="btn btn-light btn-xl" href="https://startbootstrap.com/themes/creative/">Download Now!</a>-->
     </div>
   </section>
 
@@ -230,7 +240,7 @@
         <div class="col-lg-8 text-center">
           <h2 class="mt-0">Let's Get In Touch!</h2>
           <hr class="divider my-4">
-          <p class="text-muted mb-5">Ready to start your next project with us? Give us a call or send us an email and we will get back to you as soon as possible!</p>
+          <p class="text-muted mb-5"></p>
         </div>
       </div>
       <div class="row">
@@ -241,7 +251,7 @@
         <div class="col-lg-4 mr-auto text-center">
           <i class="fas fa-envelope fa-3x mb-3 text-muted"></i>
           <!-- Make sure to change the email address in anchor text AND the link below! -->
-          <a class="d-block" href="mailto:contact@yourwebsite.com">contact@yourwebsite.com</a>
+          <a class="d-block" href="mailto:mac718@gmail.com">mac718@gmail.com</a>
         </div>
       </div>
     </div>
