@@ -1,0 +1,32 @@
+class Stack {
+  constructor(values = []) {
+    value = value.toString()
+    this.stack = []
+    for(let i = 0; i < value.length; i++) {
+      this.stack[i] = value[i]
+    }
+  }
+
+  push(value) {
+    this.stack[stack.length] = value
+    return this.stack
+  }
+
+  pop() {
+    let poppedValue = this.stack[this.stack.length - 1]
+    let newStack = [];
+    for (let i = 0; i < this.stack.length - 1; i++) {
+      newStack[i] = this.stack[i]
+    }
+    this.stack = newStack
+    return poppedValue;
+  }
+
+  peek() {
+    return this.stack[this.stack.length-1]
+  }
+
+  empty() {
+    return this.stack = []
+  }
+}

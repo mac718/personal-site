@@ -24,3 +24,12 @@
 #musings a {
   font-size: 1.25rem;
 }
+
+h3 {
+  text-align: center;
+}
+
+a h3 {
+  color: black;
+  margin-top: 15px;
+}
