@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+  <link rel="stylesheet" href='css/style.css'>
+
+
+  <title>Mike Coon - PSA: Omniauth-facebook, Devise, and Rails</title>
+</head>
+<body class="container">
+<h1 class='article'>PSA: Omniauth-facebook, Devise, and Rails</h1>
+
+<p>In preparation for my current job hunt, I recently revisited a project I worked on last year for inclusion in my portfolio: a Facebook clone called Odinbook that I built with Rails. As I was poking around to make sure that everything was working as it should, I noticed, to my chagrin, that omniauth user authentication through Facebook was not operational. I took a look at my terminal to see what the trouble could be and plucked out the relevant section amongst the gaggle of server logs: 
+</p>
+
+<div class='code'>
+  <pre class="prettyprint"><code>
+  Started GET "/accounts/auth/facebook" for 127.0.0.1 at 2019-09-26 13:51:16 -0700
+  (facebook) Request phase initiated.
+  Started GET "/accounts/auth/facebook" for 127.0.0.1 at 2019-09-26 13:51:16 -0700
+  (facebook) Request phase initiated.
+  Started GET "/accounts/auth/facebook/callback?code=AQAkA70qdFAPf-ZfnGx8YsZxyxVuAMf3XbniAcRi-PxoV
+  LAou9WB8E9vIdBNwvLW6VnglZaaC8e4avqphTqnJqxE_32_5vhB3zdpzSg96pmLxtuLAUgMj8QP2oxMi8VMZBy-bfJcC-HnI
+  fXok0QHeqZBR5B2MQhe-PCiVEiRPQcfo8CC7V_c0BSpzR2ssEPTGZnYiFbLblacFLKum16PlTuZbGjlsIZozVf2wrXLrQuCK
+  BxwQXW3hVQCkrhS7Eni9oCju5r1qVjS9DRHjR6SrVCS0nIoeWZtqL4kXDEHXrh9pd9mcgBtEetoJHJWujELtgY-NDyUJ2aAL
+  0qksEG0lZtEMIpCvIXGLu_ea15fNMjKvg&state=df105568f8d68638f3f6fafcd5cc0bc0a681340d686ae99e" for 127.0.0.1 at 2019-09-26 13:51:16 -0700
+  <strong><em>(facebook) Callback phase initiated.
+  (facebook) Callback phase initiated.</em></strong>
+  (facebook) Authentication failure! invalid_credentials: OAuth2::Error, {"message"=>"This authorization code has been used.", 
+  "type"=>"OAuthException", "code"=>100, "fbtrace_id"=>"Ag-7uiDdGQoX6-5NndyIEf0"}: 
+  {"error":{"message":"This authorization code has been used.","type":"OAuthException","code":100,"fbtrace_id":"Ag-7uiDdGQoX6-5NndyIEf0"}}
+  </code></pre>
+</div>
+
+<p>From the above we can see that the callback phase was being initiated twice in succession, causing the same authorization code to be passed to Facebook twice resulting in the authentication error seen just below the callback initiation entries.</p>
+
+<p>The issue was a bit of a head-scratcher; I had adhered to the omniauth-facebook gem’s documentation, setting up an omniauth.rb initializer in app/config/initializers to apply the omniauth middleware with the following code:</p>
+
+<div class='code'>
+  <pre class="prettyprint"><code>
+    Rails.application.config.middleware.use OmniAuth::Builder do
+      provider :facebook, ENV['app_ID'], ENV['app_secret']
+    End
+  </code></pre>
+</div> 
+
+<p>It was a comment on Stack Overflow from a post on a related, but not totally identical problem that clued me into the solution:</p>
+
+<div class='code'>
+  <pre><code>
+    -do we need to have the fb config twice 1. devise.rb and 2. omniauth.rb ? 
+    -No, if you are using devise, you only have to set it in devise.rb
+  </code></pre>
+</div> 
+
+<p>Eureka! I am indeed utilizing Devise for authentication in this app, so after reading this small exchange I opened up the app/config/initializers/devise.rb file and sure enough, I had already set the omniauth config there:</p>
+
+<div class='code'>
+  <pre class="prettyprint"><code>
+    config.omniauth :facebook, Figaro.env.app_ID, Figaro.env.app_secret
+  </code></pre>
+</div> 
+
+<p>
+  I commented out the code in my omniauth.rb file and all was once again well; I was able to both create a new account and authenticate an existing account with Facebook and the server log confirmed the story:
+</p>
+
+<div class='code'>
+  <pre class="prettyprint"><code>
+    Started GET "/accounts/auth/facebook" for 127.0.0.1 at 2019-09-26 13:53:18 -0700
+    (facebook) Request phase initiated.
+    Started GET "/accounts/auth/facebook" for 127.0.0.1 at 2019-09-26 13:53:19 -0700
+    (facebook) Request phase initiated.
+    Started GET "/accounts/auth/facebook/callback?code=AQARrTnw2WA-oT9kEqacKF2cw-Sz5BPSib-6DCaUuqORLISWqcysUzHLXCfPhD_yYMfoTJDl--LARJ8tKhUfd0L1_mxKV3wNfSutHtd4EyxvBq9-9OQHChKH595raR-ayX_grIIaeVlSjLir-3O50sFGNrRDNlM2eH5cchBXENzcKGWv2w1SPbQcTiUoZCixKj1e0aERYbBrmrpO5Ud5WV4FNIt0RITydJ_L-NY6uJnzw5Xw8jZGOLcACM05S-XlVXDAITEohzKUiW32kGmw14VNqfaS8y8ugaI5eB-9LBbe9Yzul2hWbmBbj70cuT8HVE7FNLn_RinfpmiVud0RwmWwX5O-Raj9X623WPVLxqEkbA&state=a2e81b04ce02b698429e4bdb6f5b8b01f0e2b09aac8dc048" for 127.0.0.1 at 2019-09-26 13:53:19 -0700
+    <strong><em>(facebook) Callback phase initiated.</em></strong>
+    Processing by Users::OmniauthCallbacksController#facebook as HTML
+      Parameters: {"code"=>"AQARrTnw2WA-oT9kEqacKF2cw-Sz5BPSib-6DCaUuqORLISWqcysUzHLXCfPhD_yYMfoTJDl--LARJ8tKhUfd0L1_mxKV3wNfSutHtd4EyxvBq9-9OQHChKH595raR-ayX_grIIaeVlSjLir-3O50sFGNrRDNlM2eH5cchBXENzcKGWv2w1SPbQcTiUoZCixKj1e0aERYbBrmrpO5Ud5WV4FNIt0RITydJ_L-NY6uJnzw5Xw8jZGOLcACM05S-XlVXDAITEohzKUiW32kGmw14VNqfaS8y8ugaI5eB-9LBbe9Yzul2hWbmBbj70cuT8HVE7FNLn_RinfpmiVud0RwmWwX5O-Raj9X623WPVLxqEkbA", "state"=>"a2e81b04ce02b698429e4bdb6f5b8b01f0e2b09aac8dc048"}
+  </code></pre>
+</div>
+
+<p>Only one callback phase initiation!</p>
+
+<p>So with that issue solved, I turned my attention to the duplicate request phases at the top of the excerpt above. While it didn’t appear to be causing any immediate problems, I was uncomfortable with it in principle and worried that it may eventually lead to a tricky bug down the road. A little google searching lead me to the culprit: turbolinks. I disabled turbolinks for the Oauth link like so:</p>
+
+<div class='code'>
+  <pre class="prettyprint"><code>
+    <%= link_to "Sign in with #{OmniAuth::Utils.camelize(provider)}",
+     user_facebook_omniauth_authorize_path(resource), <strong><em>data: {turbolinks: false}</em></strong> %>
+  </code></pre>
+</div> 
+
+<p>and the repeat request was eliminated:</p>
+
+<div class='code'>
+  <pre class="prettyprint"><code>
+    <strong><em>Started GET "/accounts/auth/facebook" for 127.0.0.1 at 2019-10-02 08:45:25 -0700
+    (facebook) Request phase initiated.</em></strong>
+    Started GET "/accounts/auth/facebook/callback?code=AQArPbmhcOlJU9woExRzl4FIoPN1gU2FredV_OyZRuvnAoPZXA5IQkeywGaYQYeLhgzrhwWS1clKMS9HcmWYKoRDPMNqv4rfPC1Vibgsg6Y5cQbTJDd45V1dP5tMppEkeeBq
+    EFI7PiL-VJmE6dqNNq2EiVaXRIdPxxPRlJkvy01Nf2Wqa9efzmDqhjC-bVfKkEgxF61WiXYA6hd3wbVklsUBj7JSZ
+    j-mEF0v_IHpAgUE240dqz23r-iciBUmmXxaZi0ofCsbaVMnILGA3Vn8Wxt2IiwyYVxd2zfIF81eBILlJkGxjmoCOX
+    RaDupHLAe90MGC0SFVuK1mdRVm4XiLhWJeAGoErkj03Z_TppC3xjJaFw&state=ff4143b2b2a5786d0cd9f278bd
+    34e7835b3af747a274326c" for 127.0.0.1 at 2019-10-02 08:45:25 -0700
+    (facebook) Callback phase initiated.
+    Processing by Users::OmniauthCallbacksController#facebook as HTML
+      Parameters: {"code"=>"AQArPbmhcOlJU9woExRzl4FIoPN1gU2FredV_OyZRuvnAoPZXA5IQkeywGaYQYeLhgzrhw
+      WS1clKMS9HcmWYKoRDPMNqv4rfPC1Vibgsg6Y5cQbTJDd45V1dP5tMppEkeeBqEFI7PiL-VJmE6dqNNq2EiVaXR
+      IdPxxPRlJkvy01Nf2Wqa9efzmDqhjC-bVfKkEgxF61WiXYA6hd3wbVklsUBj7JSZj-mEF0v_IHpAgUE240dqz23
+      r-iciBUmmXxaZi0ofCsbaVMnILGA3Vn8Wxt2IiwyYVxd2zfIF81eBILlJkGxjmoCOXRaDupHLAe90MGC0SFVuK1
+      mdRVm4XiLhWJeAGoErkj03Z_TppC3xjJaFw", "state"=>"ff4143b2b2a5786d0cd9f278bd34e7835b3af747a274326c"}
+  </code></pre>
+</div> 
+
+<p>So TLDR, if you’re using both Devise and Omniauth-facebook (and I’d imagine omniauth gems for authentication through other sites), an omniauth.rb file is not necessary if you configure omniauth in your devise.rb file. Also, in the event of duplicate GET request, it may be resolved by disabling turbolinks.</p>
+</body>
+</html>

@@ -1,11 +1,12 @@
-.post h1 {
+h1 {
   text-align: center;
   margin-bottom: 25px;
 }
 
 .code {
   border: 1px solid;
-  background-color: lightgray;
+  background-color: #fffeee;
+  margin-bottom: 20px;
 }
 
 #navbarResponsive {
@@ -23,4 +24,8 @@
 
 #musings a {
   font-size: 1.25rem;
+}
+
+#post-list {
+  list-style: none;
 }
