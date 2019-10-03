@@ -29,3 +29,12 @@ h1 {
 #post-list {
   list-style: none;
 }
+
+h3 {
+  text-align: center;
+}
+
+a h3 {
+  color: black;
+  margin-top: 15px;
+}
