@@ -2,6 +2,7 @@
 <html>
 <head>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
   <link rel="stylesheet" href='css/style.css'>
 
 
@@ -15,7 +16,7 @@
 <p>The React app in question is a historical stock trading simulator that allows a hypothetical user to trade a selection of stocks and maintain a portfolio using stock data from 2017 provided by the Quandl API.  The stock information and the user’s portfolio all change in real time based on a date range slider at the top of the page that sets the current 2017 date. As such, the current date object is utilized in just about every component to calculate and display the proper stock and portfolio values. So imagine my dismay when I realized after many hours of work, the data being displayed was not corresponding to that of the current date. Further, I discovered that the entire date range was actually shifting back by a day after the first slide of the range slider. I’d be lying if I asserted that I now understand all of what was happening under the hood, but, on a hunch, I formulated the hypothesis that my date object unpredictability was in some way related to time zones. The following function is the fix I employed:</p>
 
 <div class='code'>
-  <pre><code>
+  <pre class="prettyprint"><code>
   const makeUTCDate = milliseconds => {
     let date = new Date(milliseconds)
     let dateYear = date.getUTCFullYear();
