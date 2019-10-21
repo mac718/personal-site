@@ -38,3 +38,11 @@ a h3 {
   color: black;
   margin-top: 15px;
 }
+
+.project-links {
+  text-align: center;
+}
+
+.project-links a {
+  display: inline-block;
+}
