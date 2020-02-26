@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+      crossorigin="anonymous"
+    />
+    <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+    <link rel="stylesheet" href="css/style.css" />
+
+    <title>Mike Coon - Rails vs Express: A Backend Comparison</title>
+  </head>
+  <body class="container">
+    <h1 class="post">Rails vs Express: A Backend Comparison</h1>
+
+    <p>
+      When it comes to web development, there are no perfect solutions. Every
+      problem-solving strategy carries with it tradeoffs that can make settling
+      upon a specific tool and/or architecture a complex endeavor. As such, I’ve
+      taken it upon myself to set up two full-stack applications in an effort to
+      get some practice at analyzing the pros and cons of each schema. Both apps
+      feature a React front end, but the backends differ: one utilizes Rails and
+      the other Express. Both apps also feature user authentication.
+    </p>
+
+    <h3>Rails + React + PostgreSQL</h3>
+
+    <p>
+      When I embarked upon this project, my instinct was to incorporate Devise,
+      the famous (infamous?) authentication gem, into the Rails backend. This
+      proved to be somewhat more challenging than I initially thought it would
+      be.
+    </p>
+
+    <p>
+      Devise requires that a root route be specified, so I set up a
+      <code>&lt;div id="root"&gt;&lt;/div&gt;</code>
+      on the view governed by the controller action to which the root route was
+      pointing (
+      <code>‘welcome#home’</code>
+      ), and populated this
+      <code>div</code>
+      with the React app by means of
+      <code><%= javascript_pack_tag ‘index’ %></code>
+      . This also required me to point webpack to
+      <code>create-react-app</code>
+      as the front end source rather than the default
+      <code>javascript_packs folder</code>
+      provided by Rails. From there I created the components for my front end
+      and created my own
+      <code>SessionsController</code>
+      , which inherited from Devise’s
+      <code>SessionsController</code>
+      and which I instructed Devise to use. When I had wired up my front end
+      appropriately to communicate with my backend routes, which also required a
+      special namespace for Devise actions, everything appeared to be working
+      correctly until I tried to sign out and then sign back in. My Rails server
+      indicated a CSRF error, despite my sending along the CSRF token in the
+      header of each AJAX request. This threw me for a loop momentarily, but I
+      soon realized what the issue was: upon signing out the first time, the
+      CSRF token was changed. I was pulling the token that I was sending from
+      the front end from the meta tags provided by Rails, but since the front
+      end app was single page and not re-rendering from the server upon each
+      sign out and sign in, the meta tag was not reflecting the change made to
+      the CSRF token upon sign out. This quickly became a time-consuming
+      nuscience, so I scrapped this approach and decided to roll my own
+      token-based authentication scheme without Devise. This was a fairly
+      challenging task, as this approach was new to me, but once I figured out
+      what was going on, the app worked as expected.
+    </p>
+
+    <h3>Express + React + Mongoose</h3>
+
+    <p>
+      Express is a different animal from Rails in that it’s an extremely
+      lightweight framework. A more analogous Ruby counterpart in terms of
+      abstraction and out-of-the-box functionality might be Sinatra, but from a
+      popularity standpoint, Rails is a better analogue to the extremely widely
+      used Express, hence my decision to compare these two seemingly disparate
+      tools.
+    </p>
+
+    <p>
+      In my building of the Express backend, I was immediately faced with a
+      decision that did not come up when considering my Rails application: what
+      database should I use? Rails uses SQL databases by default on top of which
+      Rails lays its very powerful Active Record module that provides
+      user-friendly abstractions for SQL database manipulation. While it is
+      certainly possible to use a noSQL database with Rails, it requires a good
+      bit of custom configuration and renders useless Active Record, one of
+      Rails most powerful conveniences. Express does not come with any database
+      by default nor does it come with a default view layer. Every Express app
+      that requires a database requires the developer to incorporate the ORM of
+      his/her choice upon creation of the app. Given my many options, I decided
+      on a MogoDB database powered by the Mongoose ORM based on the massive
+      popularity that the MERN stack is enjoying at the moment. While it’s nice
+      to have this level of flexibility, I paid a small time cost as a result of
+      having to configure Mongoose. While it isn’t doesn’t require a massive
+      amount of code, it’s not nothing, and this is the sort of configuration
+      that comes up again and again with a lightweight framework like Express.
+      The time adds up over the course of building an entire app or feature.
+    </p>
+
+    <p>
+      Regarding authentication, the Express app features a very similar
+      JWT-based authentication system. Both the Rails and NPM ecosystems feature
+      JWT packages that facilitate this strategy and make implementation fairly
+      straightforward. However, the Passport authentication library, which I did
+      not utilize in this particular project is one other advantage of Express
+      over Rails where JWT authentication, and, more generally, full stack app
+      authentication is concerned. Passport supports JWT authentication along
+      with a long list of other authentication strategies. With Passport
+      properly configured, an Express app is poised to incorporate additional
+      modes of authentication with relative ease. This would be a much more
+      involved and time-consuming process in a full stack Rails+React app.
+    </p>
+
+    <h3>Conclusion</h3>
+
+    <p>
+      Rails is an extremely opinionated framework that assumes a specific
+      architecture and certain naming conventions. A developer who is able to
+      adhere to these expectations is rewarded with a bevy of built-in
+      functionality that Rails abstracts away and executes under the hood
+      without explicit, time-consuming boilerplate configuration. Express, on
+      the other hand, is far less concerned about file structure and file names,
+      but requires much more explicit configuration to get things up and
+      running. So, while Rails is technically a more powerful tool that quickly
+      developed a reputation in its early days for prototyping that virtually
+      coded itself, it is not terribly flexible.
+    </p>
+
+    <p>
+      That being said, once I abandoned Devise and decided to roll my own JWT
+      authentication in Rails, the experience of building the two backends was
+      very similar. If you plan on using a SQL database and your app won’t be
+      handling a huge number of users, Rails might be the better choice given
+      that Rails provides convenient generators to make setting up models and
+      data tables very easy. However, if your app utilizes packages or patterns
+      that Rails does not favor out of the box, Express will likely be the more
+      straightforward solution.
+    </p>
+  </body>
+</html>
